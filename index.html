@@ -20,37 +20,31 @@
 
   .card {
     background: white;
-    padding: 30px 25px 40px;
-    border-radius: 25px;
+    padding: 30px 25px 35px;
+    border-radius: 28px;
     text-align: center;
-    width: 330px;
-    box-shadow: 0 15px 35px rgba(255, 105, 180, 0.3);
+    width: 340px;
+    box-shadow: 0 20px 40px rgba(255, 105, 180, 0.35);
     position: relative;
   }
 
-  .stickers {
-    display: flex;
-    justify-content: center;
-    gap: 10px;
+  .emojis {
+    font-size: 48px;
     margin-bottom: 10px;
   }
 
-  .stickers img {
-    width: 80px;
-  }
-
   h2 {
-    margin: 15px 0 25px;
     color: #ff4d79;
+    margin-bottom: 25px;
   }
 
   .buttons {
     position: relative;
-    height: 170px;
+    height: 180px;
   }
 
   button {
-    padding: 14px 26px;
+    padding: 14px 28px;
     font-size: 16px;
     border: none;
     border-radius: 30px;
@@ -67,10 +61,16 @@
   }
 
   #noBtn {
-    background: #f1f1f1;
+    background: #eeeeee;
     color: #555;
     right: 20px;
     bottom: 10px;
+  }
+
+  .shy-text {
+    margin-top: 10px;
+    font-size: 14px;
+    color: #888;
   }
 </style>
 </head>
@@ -87,12 +87,7 @@
 </iframe>
 
 <div class="card">
-  <div class="stickers">
-    <!-- chocolate -->
-    <img src="https://i.imgur.com/0KfbZpE.png" alt="chocolate">
-    <!-- flowers -->
-    <img src="https://i.imgur.com/7kG6X9g.png" alt="flowers">
-  </div>
+  <div class="emojis">🍫💐💖</div>
 
   <h2>Will you be my valentine?</h2>
 
@@ -100,6 +95,8 @@
     <button id="yesBtn">Yes</button>
     <button id="noBtn">No</button>
   </div>
+
+  <div class="shy-text">sorry, "no" seems a bit shy</div>
 </div>
 
 <script>
@@ -108,12 +105,12 @@
 
   let yesScale = 1;
 
-  function dodgeNo() {
+  function maxChaosDodge() {
     const card = document.querySelector(".card");
     const rect = card.getBoundingClientRect();
 
-    const maxX = rect.width - 90;
-    const maxY = rect.height - 140;
+    const maxX = rect.width - 100;
+    const maxY = rect.height - 150;
 
     const x = Math.random() * maxX;
     const y = Math.random() * maxY;
@@ -121,16 +118,26 @@
     noBtn.style.left = x + "px";
     noBtn.style.top = y + "px";
 
-    // YES grows slowly 💕
-    yesScale += 0.06;
+    // YES grows slightly ONLY when NO escapes
+    yesScale += 0.04;
     yesBtn.style.transform = `scale(${yesScale})`;
   }
 
-  // PC
-  noBtn.addEventListener("mouseenter", dodgeNo);
+  // PC: avoid cursor BEFORE hover
+  document.addEventListener("mousemove", (e) => {
+    const rect = noBtn.getBoundingClientRect();
+    const distance = Math.hypot(
+      e.clientX - (rect.left + rect.width / 2),
+      e.clientY - (rect.top + rect.height / 2)
+    );
 
-  // Mobile
-  noBtn.addEventListener("touchstart", dodgeNo);
+    if (distance < 80) {
+      maxChaosDodge();
+    }
+  });
+
+  // Mobile: instant dodge
+  noBtn.addEventListener("touchstart", maxChaosDodge);
 
   yesBtn.addEventListener("click", () => {
     document.body.innerHTML = `
@@ -145,7 +152,7 @@
         text-align:center;
       ">
         <h1 style="color:#ff4d79;">Yey! I love you 💖</h1>
-        <img src="https://i.imgur.com/7kG6X9g.png" style="width:200px;margin-top:20px;">
+        <div style="font-size:64px;margin-top:15px;">💐🍫🥰</div>
       </div>
     `;
   });
