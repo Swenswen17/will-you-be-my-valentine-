@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Valentine 💘</title>
 
-  <!-- Cute font -->
   <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&display=swap" rel="stylesheet">
 
   <style>
@@ -69,12 +68,17 @@
 </head>
 
 <body>
+
+  <!-- YouTube music (autoplay after interaction) -->
+  <iframe id="music" width="0" height="0"
+    src="https://www.youtube.com/embed/GhQxrCrVSyw?autoplay=1&loop=1&playlist=GhQxrCrVSyw"
+    frameborder="0"
+    allow="autoplay">
+  </iframe>
+
   <div class="card">
-    <!-- Cute sticker -->
     <img class="sticker" src="https://i.imgur.com/1X6R9Yf.png" alt="cute sticker">
-
     <h2>Will you be my valentine?</h2>
-
     <div class="buttons">
       <button id="yesBtn">Yes</button>
       <button id="noBtn">No</button>
@@ -84,12 +88,12 @@
   <script>
     const noBtn = document.getElementById("noBtn");
     const yesBtn = document.getElementById("yesBtn");
-    let yesScale = 1;
 
-    function chaosMove() {
+    let yesScale = 1.0;
+
+    function moveAway() {
       const card = document.querySelector(".card");
       const cardRect = card.getBoundingClientRect();
-
       const maxX = cardRect.width - 80;
       const maxY = cardRect.height - 120;
 
@@ -99,16 +103,14 @@
       noBtn.style.left = randomX + "px";
       noBtn.style.top = randomY + "px";
 
-      // YES gets bigger 😈
-      yesScale += 0.15;
+      // Increase YES mildly
+      yesScale += 0.05;
       yesBtn.style.transform = `scale(${yesScale})`;
     }
 
-    // MAX CHAOS triggers
-    noBtn.addEventListener("mouseover", chaosMove);
-    noBtn.addEventListener("mouseenter", chaosMove);
-    noBtn.addEventListener("touchstart", chaosMove);
-    document.addEventListener("mousemove", chaosMove);
+    // NO runs away on mouse & touch
+    noBtn.addEventListener("mouseover", moveAway);
+    noBtn.addEventListener("touchstart", moveAway);
 
     yesBtn.addEventListener("click", () => {
       document.body.innerHTML = `
